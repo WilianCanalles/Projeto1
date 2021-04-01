@@ -18,22 +18,25 @@
     <section>
         <input class="btn btn-info btn_fix" type="submit" value="Pedidos" onclick="location.href='pedidos.php?busca=0'">
         <div class="container">
-            <form action="carrinho.php" method="post">
+            
                 <div class="row">
                     <?php foreach ($result_tb_produto as $produto) { ?>
-
+                        <form action="carrinho.php" method="post">
                         <div class="col-md-4 espaco">
                             <img class="tamanho_img" src="img/<?php echo $produto['cod_prod'] ?>.png">
-                             <input type="hidden" id="cod" value="<?php echo $produto['cod_prod'] ?>">
+                            <input type="hidden" name="cod" value="<?php echo $produto['cod_prod'] ?>">
                             <p>Descrição:</p>
-                        <p id="descricao" value="<?php echo $produto['descricao'] ?>"><?php echo $produto['descricao'] ?></p>
+                            <p name="descricao" value="<?php echo $produto['descricao'] ?>"><?php echo $produto['descricao'] ?></p>
                             <p>Preço:</p>
-                            <p id="preco" value="<?php echo $produto['valor'] ?>"><?php echo "R$ " . $produto['valor'] ?></p>
+                            <p name="preco" value="<?php echo $produto['valor'] ?>"><?php echo "R$ " . $produto['valor'] ?></p>
                             <input class="btn btn-info" type="submit" value="Comprar">
                         </div>
+
+                        </form>
                     <?php  } ?>
                 </div>
-            </form>
+                
+            
         </div>
     </section>
 

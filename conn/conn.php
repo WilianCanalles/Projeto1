@@ -1,19 +1,35 @@
 <?php
 include_once 'conexao.php';
-
-$prod_id = $_POST['prod_id'];
-$valor_tt = $_POST['valor_tt'];
-$cliente_id = $_POST['cliente_id'];
-$quantidade = $_POST['quantidade'];
-
-/*----------------------------------*/
-
-$nome = $_POST['nome'];
-$cpf = $_POST['cpf'];
+$prod_id = '';
+$valor_tt = '';
+$cliente_id = '';
+$quantidade = '';
 
 /*----------------------------------*/
 
-$carrinho = $_POST['carrinho'];
+$nome = '';
+$cpf = '';
+
+/*----------------------------------*/
+
+$carrinho = '';
+
+if (isset($_POST['prod_id'])) {
+    $prod_id = $_POST['prod_id'];
+} elseif (isset($_POST['valor_tt'])) {
+    $valor_tt = $_POST['valor_tt'];
+} elseif (isset($_POST['cliente_id'])) {
+    $cliente_id = $_POST['cliente_id'];
+} elseif (isset($_POST['quantidade'])) {
+    $quantidade = $_POST['quantidade'];
+} elseif (isset($_POST['nome'])) {
+    $nome = $_POST['nome'];
+} elseif (isset($_POST['cpf'])) {
+    $cpf = $_POST['cpf'];
+} elseif (isset($_POST['carrinho'])) {
+    $carrinho = $_POST['carrinho'];
+}
+
 
 try {
     $conexao = new PDO(
