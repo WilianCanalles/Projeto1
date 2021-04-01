@@ -15,7 +15,7 @@
 <body>
     <?php include "conn/conn.php";
     $cod_produto = $_POST['cod'];
-    print_r($_POST);
+   // print_r($_POST);
     ?>
     <section>
         <div class="container">
