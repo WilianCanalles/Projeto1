@@ -18,19 +18,23 @@
     <section>
         <input class="btn btn-info btn_fix" type="submit" value="Pedidos" onclick="location.href='pedidos.php?busca=0'">
         <div class="container">
-            <div class="row">
-                <?php foreach ($result_tb_produto as $produto) { ?>
+            <form action="carrinho.php" method="post">
+                <div class="row">
+                    <?php foreach ($result_tb_produto as $produto) { ?>
 
-                    <div class="col-md-4 espaco">
-                        <img class="tamanho_img" src="img/<?php echo $produto['cod_prod'] ?>.png">
-                        <p>Descrição:</p>
-                        <p><?php echo $produto['descricao'] ?></p>
-                        <p>Preço:</p>
-                        <p><?php echo "R$ " . $produto['valor'] ?></p>
-                        <input class="btn btn-info" type="submit" value="Comprar" onclick="comprar(<?php echo $produto['cod_prod'] ?>);">
-                    </div>
-                <?php  } ?>
-            </div>
+                        <div class="col-md-4 espaco">
+                            <img class="tamanho_img" src="img/<?php echo $produto['cod_prod'] ?>.png">
+                             <input type="hidden" id="cod" value="<?php echo $produto['cod_prod'] ?>">
+                            <p>Descrição:</p>
+                        <p id="descricao" value="<?php echo $produto['descricao'] ?>"><?php echo $produto['descricao'] ?></p>
+                            <p>Preço:</p>
+                            <p id="preco" value="<?php echo $produto['valor'] ?>"><?php echo "R$ " . $produto['valor'] ?></p>
+                            <input class="btn btn-info" type="submit" value="Comprar">
+                        </div>
+                    <?php  } ?>
+                </div>
+            </form>
+        </div>
     </section>
 
     <!--Bootstrap JS-->
