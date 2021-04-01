@@ -13,32 +13,30 @@
 </head>
 
 <body>
-    <?php include "conn/conn.php" ?>
+    <?php include "conn/conn.php";
+    $cod_produto = $_POST['cod'];
+    ?>
     <section>
         <div class="container">
             <h1>CARRINHO</h1>
             <div class="row">
+                <?php foreach ($result_tb_produto as $produto) {
+                    if ($cod_produto == $produto['cod_prod']) {
+                ?>
 
-                <?php
-
-                $result_tb_carrinho = (explode('|', $result_tb_carrinho[0]['pedido']));
-                $max = max($result_tb_carrinho);
-
-                for ($i = 0; $i <= $max; $i++) { ?>
                         <div class="col-md-4 espaco">
-                            <img class="tamanho_img" src="img/<?php echo $result_tb_produto[$i]['cod_prod'] ?>.png">
+                            <img class="tamanho_img" src="img/<?php echo $produto['cod_prod'] ?>.png">
+                            <input type="hidden" id="cod" value="<?php echo $produto['cod_prod'] ?>">
                             <p>Descrição:</p>
-                            <p><?php echo $result_tb_produto[$i]['descricao'] ?></p>
+                            <p id="descricao" value="<?php echo $produto['descricao'] ?>"><?php echo $produto['descricao'] ?></p>
                             <p>Preço:</p>
-                            <p><?php echo "R$ " . $result_tb_produto[$i]['valor'] ?></p>
-                            <input class="btn btn-info" type="submit" value="Comprar" onclick="comprar(<?php echo $result_tb_produto[$i]['cod_prod'] ?>);">
+                            <p id="preco" value="<?php echo $produto['valor'] ?>"><?php echo "R$ " . $produto['valor'] ?></p>
+                            <input class="btn btn-info" type="submit" value="-">
+                            <input class="btn btn-info" type="submit" value="+">
+                            <input class="btn btn-info" type="submit" value="Finalizar Compra">
                         </div>
-
-
-                <?php
-                    
+                <?php  }
                 } ?>
-
             </div>
     </section>
 
