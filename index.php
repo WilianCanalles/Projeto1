@@ -17,6 +17,7 @@
 
     <section>
         <input class="btn btn-info btn_fix" type="submit" value="Pedidos" onclick="location.href='pedidos.php?busca=0'">
+        <input class="btn btn-info btn_fix" style="top : 50px!important" type="submit" value="Carrinho" onclick="location.href='carrinho.php'">
         <div class="container">
             
                 <div class="row">

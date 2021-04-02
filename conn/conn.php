@@ -60,6 +60,18 @@ try {
 
     /*----------------------------------*/
 
+    $query_tb_pedidos_order_cliente = "SELECT * FROM pedido
+    INNER JOIN produto p ON pedido.produto = p.cod_prod
+    INNER JOIN cliente c ON pedido.cliente = c.cod_cliente
+    ORDER BY c.nome DESC";
+
+    $statement = $conexao->prepare($query_tb_pedidos_order_cliente);
+
+    $statement->execute();
+
+    $result_tb_pedidos_order_cliente = $statement->fetchall(PDO::FETCH_BOTH);
+    /*----------------------------------*/
+
     $query_tb_carrinho = "SELECT * FROM carrinho";
 
     $statement = $conexao->prepare($query_tb_carrinho);
@@ -67,7 +79,24 @@ try {
     $statement->execute();
 
     $result_tb_carrinho = $statement->fetchall(PDO::FETCH_BOTH);
+    $result_tb_carrinho = explode("|", $result_tb_carrinho[0][0]);
 
+    foreach ($result_tb_carrinho as $produto) {
+        //echo($i);
+        $query_tb_produto_carrinho = "SELECT * FROM produto WHERE cod_prod = $produto";
+
+        $statement = $conexao->prepare($query_tb_produto_carrinho);
+
+        $statement->execute();
+
+        $result_tb_produto_carrinho = $statement->fetchall(PDO::FETCH_BOTH);
+
+        $array[] = $result_tb_produto_carrinho;
+    }
+
+    /*echo '<pre>';
+    print_r($array);
+    echo '</pre>';*/
 
     /*----------------------------------*/
 

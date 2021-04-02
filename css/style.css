@@ -9,8 +9,31 @@
     top: 10px;
     right: 10px;
 }
+.fix_left_top{
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+.fix_left_top_total_price{
+    position: fixed;
+    top: 50px;
+    right: 10px;
+}
+.fix_bottom_btn{
+    bottom: 10px;
+    right: 10px;
+    position: fixed;
+
+}
+.space_row{
+    margin-top: 40px;
+}
+
 .ocultar{
 
 display: none;
 
+}
+.separador{
+    padding: 0 10px 0 10px;
 }
