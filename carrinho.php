@@ -22,24 +22,31 @@
             <span class="display-4">CARRINHO</span>
             <div class="row space_row">
                 <?php
-                for ($i = 0; $i < (count($result_tb_carrinho)); $i++) {
-                ?>
+                if (empty($result_tb_carrinho)) { ?>
 
-                    <div class="col-md-4 espaco">
-                        <img class="tamanho_img" src="img/<?php echo $array[$i][0]['cod_prod'] ?>.png">
-                        <input type="hidden" id="cod" value="<?php echo $array[$i][0]['cod_prod'] ?>">
-                        <p>Descrição:</p>
-                        <p id="descricao" value="<?php echo $array[$i][0]['descricao'] ?>"><?php echo $array[$i][0]['descricao'] ?></p>
-                        <p>Preço:</p>
-                        <p id="preco<?php echo $i ?>" value="<?php echo $array[$i][0]['valor'] ?>"><?php echo "R$ " . $array[$i][0]['valor'] ?></p>
-                        <input class="btn btn-info" type="submit" value="-" onclick="contador_produto('-','<?php echo $array[$i][0]['qtd_estoque'] ?>', <?php echo $array[$i][0]['valor'] ?>)">
-                        <label id="contador" class="separador">1</label>
-                        <input class="btn btn-info" type="submit" value="+" onclick="contador_produto('+','<?php echo $array[$i][0]['qtd_estoque'] ?>', <?php echo $array[$i][0]['valor'] ?>)">
-                        <input class="btn btn-danger" type="submit" value="remover" onclick="(remover_produto(<?php echo $array[$i][0]['cod_prod'] ?>))">
+                    <h1>CARRINHO VAZIO</h1>
 
-                    </div>
+                    <?php } else {
+                    for ($i = 0; $i < (count($result_tb_carrinho)); $i++) {
+
+                    ?>
+
+                        <div class="col-md-4 espaco">
+                            <img class="tamanho_img" src="img/<?php echo $array[$i][0]['cod_prod'] ?>.png">
+                            <input type="hidden" id="cod" value="<?php echo $array[$i][0]['cod_prod'] ?>">
+                            <p>Descrição:</p>
+                            <p id="descricao" value="<?php echo $array[$i][0]['descricao'] ?>"><?php echo $array[$i][0]['descricao'] ?></p>
+                            <p>Preço:</p>
+                            <p id="preco<?php echo $i ?>" value="<?php echo $array[$i][0]['valor'] ?>"><?php echo "R$ " . $array[$i][0]['valor'] ?></p>
+                            <input class="btn btn-info" type="submit" value="-" onclick="contador_produto('-','<?php echo $array[$i][0]['qtd_estoque'] ?>', <?php echo $array[$i][0]['valor'] ?>,<?php echo $array[$i][0]['cod_prod'] ?>)">
+                            <label id="contador<?php echo $array[$i][0]['cod_prod'] ?>" class="separador">1</label>
+                            <input class="btn btn-info" type="submit" value="+" onclick="contador_produto('+','<?php echo $array[$i][0]['qtd_estoque'] ?>', <?php echo $array[$i][0]['valor'] ?>,<?php echo $array[$i][0]['cod_prod'] ?>)">
+                            <input class="btn btn-danger" type="submit" value="remover" onclick="(remover_produto(<?php echo $array[$i][0]['cod_prod'] ?>))">
+
+                        </div>
                 <?php
 
+                    }
                 } ?>
                 <div id="resultEmpresa"></div>
                 <h1 class="fix_left_top ">TOTAL</h1>
@@ -50,18 +57,45 @@
     </section>
 
     <script type="text/javascript">
+        let qnt_carrinho = 0
         $(document).ready(function() {
-            //let valor_compra = document.getElementById('preco' + i).getAttribute("value")
+
+            $.ajax({
+                url: "conn/ajax.php",
+                method: "POST",
+                data: {
+                    carrinho: 'qnt_carrinho',
+                },
+                success: function(data) {
+                    //location.reload()
+                    //document.getElementById("resultEmpresa").innerHTML = data
+                    //alert(data)
+                    qnt_carrinho = data
+                    //alert(qnt_carrinho)
+                }
+            })
+
+        })
+        $(window).on("load", function() {
+            //alert(qnt_carrinho)
+            let id = qnt_carrinho.split('|')
+
             let valor_compra = 0
-            for (i = 0; document.getElementById('preco' + i) != null; i++) {
-                let contador = parseInt(document.getElementById('contador').innerText)
+            //alert(qnt_carrinho)
+            for (i = 0; i < id.length && id != ''; i++) {
+
+                let contador = parseInt(document.getElementById('contador' + id[i]).innerText)
+
                 valor_unit = parseInt(document.getElementById('preco' + i).getAttribute("value"))
+
                 valor_total = valor_unit * contador
+
                 valor_compra += valor_total
+                //alert(valor_compra)
 
             }
             document.getElementById('valor_total').innerText = "R$ " + valor_compra
-            document.getElementById('valor_total').setAttribute("value",valor_compra) 
+            document.getElementById('valor_total').setAttribute("value", valor_compra)
         })
 
         function remover_produto(cod) {
@@ -76,37 +110,42 @@
                     success: function(data) {
                         location.reload()
                         //document.getElementById("resultEmpresa").innerHTML = data
-                        //alert('data')
+                        //alert(data)
                     }
-                });
-            });
+                })
+            })
 
         }
 
-        function contador_produto(operador, max, preco) {
-            let contador = parseInt(document.getElementById('contador').innerText)
+        function contador_produto(operador, max, preco, id) {
+            //alert(qnt_carrinho)
+
+            let contador = parseInt(document.getElementById('contador' + id).innerText)
+            //alert(contador)
             let valor_compra = parseInt(document.getElementById('valor_total').getAttribute("value"))
             if (operador == "-" && contador > 1) {
                 contador -= 1
-                if(preco > valor_compra){
-                     valor_total = preco - valor_compra
-                    alert(preco+"teste"+valor_compra+"totoal"+valor_total)
-                }else if(preco < valor_compra){
-                     valor_total = valor_compra - preco
-                    alert(preco+"teste"+valor_compra+"totoal"+valor_total)
+                if (preco >= valor_compra) {
+                    valor_total = preco - valor_compra
+                    // alert(preco + "teste" + valor_compra + "totoal" + valor_total)
+                } else if (preco <= valor_compra) {
+                    valor_total = valor_compra - preco
+                    // alert(preco + "teste" + valor_compra + "totoal" + valor_total)
                 }
-                
-                document.getElementById('contador').innerText = contador
+
+                document.getElementById('contador' + id).innerText = contador
                 document.getElementById('valor_total').innerText = "R$ " + valor_total
+                document.getElementById('valor_total').setAttribute("value", valor_total)
             } else if (operador == "+" && contador < max) {
                 contador += 1
                 let valor_total = preco + valor_compra
-
-                document.getElementById('contador').innerText = contador
+                document.getElementById('contador' + id).innerText = contador
                 document.getElementById('valor_total').innerText = "R$ " + valor_total
+                document.getElementById('valor_total').setAttribute("value", valor_total)
             } else if (contador == max) {
                 alert("Excedeu o limite máximo")
             }
+
         }
     </script>
 

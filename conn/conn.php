@@ -79,8 +79,11 @@ try {
     $statement->execute();
 
     $result_tb_carrinho = $statement->fetchall(PDO::FETCH_BOTH);
-    $result_tb_carrinho = explode("|", $result_tb_carrinho[0][0]);
-
+    if (!empty($result_tb_carrinho)) {
+        $result_tb_carrinho = explode("|", $result_tb_carrinho[0][0]);
+    }
+    
+  
     foreach ($result_tb_carrinho as $produto) {
         //echo($i);
         $query_tb_produto_carrinho = "SELECT * FROM produto WHERE cod_prod = $produto";
@@ -94,9 +97,7 @@ try {
         $array[] = $result_tb_produto_carrinho;
     }
 
-    /*echo '<pre>';
-    print_r($array);
-    echo '</pre>';*/
+  
 
     /*----------------------------------*/
 
