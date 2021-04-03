@@ -105,19 +105,36 @@ if (isset($_POST['carrinho']) && $_POST['carrinho'] == 'remover') {
             $carrinho = $carrinho . "|" . $cod;
             //echo $carrinho;
             $query_tb_carrinho = "UPDATE carrinho SET pedido = '$carrinho'";
-    
+
             $statement = $conexao->prepare($query_tb_carrinho);
-    
+
             $statement->execute();
             //print_r($result_tb_carrinho[0][0]);
             //echo "\ncodigo" . $cod . "\n";
         }
-    }elseif(empty($result_tb_carrinho)){
-        
+    } elseif (empty($result_tb_carrinho)) {
+
         $query_insert_cliente = "INSERT INTO carrinho VALUES ('$cod')";
 
         $statement = $conexao->prepare($query_insert_cliente);
 
         $statement->execute();
     }
+} else if (isset($_POST['carrinho']) && $_POST['carrinho'] == 'finaliza_compra') {
+    $contador = $_POST['contador'];
+    $cod_cliente = $_POST['cod_cliente'];
+    $valor_total = $_POST['valor_total'];
+    $cod_produto = $_POST['cod_produto'];
+
+    $query_insert_pedido = "INSERT INTO pedido VALUES (NULL, $cod_produto, $valor_total, $contador, $cod_cliente)";
+
+    $statement = $conexao->prepare($query_insert_pedido);
+
+    $statement->execute();
+
+    $query_tb_carrinho = "DELETE FROM carrinho";
+
+    $statement = $conexao->prepare($query_tb_carrinho);
+
+    $statement->execute();
 }

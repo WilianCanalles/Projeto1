@@ -97,16 +97,16 @@ try {
         $array[] = $result_tb_produto_carrinho;
     }
 
-  
-
+ 
     /*----------------------------------*/
 
-    $query_insert_pedido = "INSERT INTO pedido VALUES (NULL, $prod_id, $valor_tt, $quantidade, $cliente_id)";
+    $query_tb_cliente = "SELECT * FROM cliente";
 
-    $statement = $conexao->prepare($query_insert_pedido);
+    $statement = $conexao->prepare($query_tb_cliente);
 
     $statement->execute();
- 
+
+    $result_tb_cliente = $statement->fetchall(PDO::FETCH_BOTH);
 
 } catch (PDOException $e) {
     echo '<p>' . $e->getMessage() . '</p>';

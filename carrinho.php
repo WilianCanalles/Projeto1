@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
 </head>
+
 
 <body>
     <?php include "conn/conn.php";
@@ -18,9 +17,13 @@
     //print_r($array[0]);
     ?>
     <section>
+
         <div class="container">
             <span class="display-4">CARRINHO</span>
+
+
             <div class="row space_row">
+
                 <?php
                 if (empty($result_tb_carrinho)) { ?>
 
@@ -33,7 +36,7 @@
 
                         <div class="col-md-4 espaco">
                             <img class="tamanho_img" src="img/<?php echo $array[$i][0]['cod_prod'] ?>.png">
-                            <input type="hidden" id="cod" value="<?php echo $array[$i][0]['cod_prod'] ?>">
+                            <input type="hidden" id="cod<?php echo $array[$i][0]['cod_prod'] ?>" value="<?php echo $array[$i][0]['cod_prod'] ?>">
                             <p>Descrição:</p>
                             <p id="descricao" value="<?php echo $array[$i][0]['descricao'] ?>"><?php echo $array[$i][0]['descricao'] ?></p>
                             <p>Preço:</p>
@@ -52,8 +55,11 @@
                 <h1 class="fix_left_top ">TOTAL</h1>
                 <h3 id="valor_total" class="fix_left_top_total_price" value="0">R$ 0</h3>
                 <input class="btn btn-info fix_bottom_btn" style="bottom: 50px!important; width: 120px; white-space: normal;" type="submit" value="Continuar Comprando" onclick="location.href='index.php'">
-                <input class="btn btn-info fix_bottom_btn" type="submit" value="Finalizar Compra">
+                <input class="btn btn-info fix_bottom_btn" type="button" value="Finalizar Compra" data-toggle="modal" data-target="#modal_pedido">
+
             </div>
+            <?php include "modal.php";
+            ?>
     </section>
 
     <script type="text/javascript">
@@ -147,14 +153,60 @@
             }
 
         }
+
+        function finaliza_compra() {
+
+            $(document).ready(function() {
+                var select = document.getElementById('cliente')
+                var option = select.options[select.selectedIndex]
+
+                let cod_cliente = option.value
+
+                let id = qnt_carrinho.split('|')
+
+
+                for (i = 0; i < id.length && id != ''; i++) {
+                    
+                    let contador = parseInt(document.getElementById('contador' + id[i]).innerText)
+
+                    let valor_total = parseInt(document.getElementById('preco' + i).getAttribute("value"))
+                    valor_total *= contador
+                    
+                    let cod_produto = parseInt(document.getElementById('cod' + id[i]).getAttribute("value"))
+                    
+                    $.ajax({
+                        url: "conn/ajax.php",
+                        method: "POST",
+                        data: {
+                            carrinho: 'finaliza_compra',
+                            contador: contador,
+                            cod_cliente: cod_cliente,
+                            valor_total: valor_total,
+                            cod_produto: cod_produto
+                        },
+                        success: function(data) {
+                            location.reload()
+                            //document.getElementById("resultEmpresa").innerHTML = data
+                            //alert(data)
+                            //qnt_carrinho = data
+                            //alert(qnt_carrinho)
+                        }
+                    })
+                }
+
+            })
+
+        }
     </script>
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!--Bootstrap JS-->
 
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </body>
 
 </html>
